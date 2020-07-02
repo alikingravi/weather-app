@@ -12,6 +12,10 @@ const SelectCities = (props) => {
   const history = useHistory();
 
   useEffect(() => {
+    if (!user) history.push("/login");
+  }, []);
+
+  useEffect(() => {
     if (user) {
       userService.getUserCities().then((res) => {
         if (res.data && res.data.length !== 0) {

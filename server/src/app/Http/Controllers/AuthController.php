@@ -99,6 +99,11 @@ class AuthController extends Controller
                     'message' => 'Unauthorized'
                 ]);
             }
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Either Username or Password is incorrect'
+            ]);
         }
     }
 }

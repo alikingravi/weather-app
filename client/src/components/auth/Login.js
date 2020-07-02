@@ -33,7 +33,7 @@ const Login = (props) => {
     setSpinner(true);
     setErrorMessage("");
     authService.login(userData).then((res) => {
-      if (res.status === 401) {
+      if (res.status === 401 || res.status === 404) {
         setErrorMessage(res.message);
         setSpinner(false);
       } else {
