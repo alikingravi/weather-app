@@ -1,0 +1,4 @@
+.idea
+docker/php/app
+.env
+src/vendor
