@@ -1,4 +1,5 @@
 /server/src/vendor
+/server/src/storage
 .DS_Store
 
 # dependencies
