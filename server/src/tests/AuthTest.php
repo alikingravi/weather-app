@@ -43,4 +43,18 @@ class AuthTest extends TestCase
                 'message' => 'Logged in successfully'
             ]);
     }
+
+    public function testLoginErrorWithInvalidCrendentials()
+    {
+        $login = [
+            'username' => 'john@test.com',
+            'password' => '12345678',
+        ];
+
+        $this->json('POST', '/api/login', $login)
+            ->seeStatusCode(404)
+            ->seeJson([
+                'message' => 'Either Username or Password is incorrect'
+            ]);
+    }
 }
