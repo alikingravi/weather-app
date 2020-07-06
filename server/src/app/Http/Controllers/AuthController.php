@@ -27,13 +27,13 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'User not logged-in'
-            ]);
+            ], 404);
         }
         return response()->json([
             'status' => 200,
             'message' => 'User logged-in',
             'data' => $user
-        ]);
+        ], 200);
     }
 
     /**
@@ -59,7 +59,7 @@ class AuthController extends Controller
         return response()->json([
             'user' => $user,
             'message' => 'User has been created'
-        ]);
+        ], 200);
     }
 
     /**
@@ -92,18 +92,18 @@ class AuthController extends Controller
                     'message' => 'Logged in successfully',
                     'data' => $user,
                     'api_token' => $apiToken
-                ]);
+                ], 200);
             } else {
                 return response()->json([
                     'status' => 401,
                     'message' => 'Unauthorized'
-                ]);
+                ], 401);
             }
         } else {
             return response()->json([
                 'status' => 404,
                 'message' => 'Either Username or Password is incorrect'
-            ]);
+            ], 404);
         }
     }
 }

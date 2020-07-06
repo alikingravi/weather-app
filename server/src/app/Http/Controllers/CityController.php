@@ -24,46 +24,51 @@ class CityController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'No cities were found'
-            ]);
+            ], 404);
         }
 
         return response()->json([
             'status' => 200,
             'data' => $cities
-        ]);
+        ], 200);
     }
 
-    public function getUserCities(Request $request)
+    public function getUserCities()
     {
-        $userCities = User::find($request->input('user_id'))->cities;
+        $userCities = User::find(auth()->user()->id)->cities;
+
+        if (count($userCities) === 0) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'No cities were found for this user'
+            ], 404);
+        }
 
         return response()->json([
             'status' => 200,
             'data' => $userCities
-        ]);
+        ], 200);
     }
 
     public function addUserCities(Request $request)
     {
-        $user = User::find($request->input('user_id'));
-
+        $user = User::find(auth()->user()->id);
         $user->cities()->attach($request->input('cityIds'));
 
         return response()->json([
             'status' => 200,
             'data' => $user
-        ]);
+        ], 200);
     }
 
     public function removeUserCities(Request $request)
     {
-        $user = User::find($request->input('user_id'));
-
+        $user = User::find(auth()->user()->id);
         $user->cities()->detach($request->input('cityIds'));
 
         return response()->json([
             'status' => 200,
             'data' => $user
-        ]);
+        ], 200);
     }
 }
