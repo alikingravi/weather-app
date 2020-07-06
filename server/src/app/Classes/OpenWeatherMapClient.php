@@ -8,14 +8,21 @@ class OpenWeatherMapClient
 {
     public function getCityCurrentWeather($cityName, $country)
     {
+        $url = $this->createUrl($cityName, $country);
+        $response = Http::get($url);
+
+        if ($response->failed()) {
+            return false;
+        }
+
+        return $this->prepareCurrentData($response->json());
+    }
+
+    public function createUrl($cityName, $country)
+    {
         $baseUrl = env('OPEN_WEATHER_MAP_BASE_URL');
         $apiKey = env('OPEN_WEATHER_MAP_API_KEY');
-        $url = $baseUrl . '?q=' . $cityName . ',' . $country . '&appid=' . $apiKey . '&units=metric';
-
-        $response = Http::get($url)->json();
-        $currentData = $this->prepareCurrentData($response);
-
-        return $currentData;
+        return $baseUrl . '?q=' . $cityName . ',' . $country . '&appid=' . $apiKey . '&units=metric';
     }
 
     private function prepareCurrentData($response)

@@ -8,14 +8,21 @@ class WeatherApiClient
 {
     public function getCityPastWeather($cityName, $country, $date)
     {
+        $url = $this->createUrl($cityName, $country, $date);
+        $response = Http::get($url);
+
+        if ($response->failed()) {
+            return false;
+        }
+
+        return $this->prepareHistoricData($response->json());
+    }
+
+    public function createUrl($cityName, $country, $date)
+    {
         $baseUrl = env('WEATHER_API_BASE_URL');
         $apiKey = env('WEATHER_API_KEY');
-        $url = $baseUrl . '?key=' . $apiKey . '&q=' . $cityName . ',' . $country . '&dt=' . $date;
-
-        $response = Http::get($url)->json();
-        $historicData = $this->prepareHistoricData($response);
-
-        return $historicData;
+        return $baseUrl . '?key=' . $apiKey . '&q=' . $cityName . ',' . $country . '&dt=' . $date;
     }
 
     private function prepareHistoricData($response)

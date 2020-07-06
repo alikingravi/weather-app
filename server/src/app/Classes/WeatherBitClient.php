@@ -6,20 +6,26 @@ use Illuminate\Support\Facades\Http;
 
 class WeatherBitClient
 {
-
     public function getCityForecastWeather($cityName, $country)
+    {
+        $url = $this->createUrl($cityName, $country);
+        $response = Http::get($url);
+
+        if ($response->failed()) {
+            return false;
+        }
+
+        return $this->prepareForecastData($response->json());
+    }
+
+    public function createUrl($cityName, $country)
     {
         $baseUrl = env('WEATHER_BIT_BASE_URL');
         $apiKey = env('WEATHER_BIT_API_KEY');
-        $url = $baseUrl . '?city=' . $cityName . ',' . $country . '&key=' . $apiKey . '&hours=6';
-
-        $response = Http::get($url);
-        $forecastData = $this->prepareForecastData($response);
-
-        return $forecastData;
+        return $baseUrl . '?city=' . $cityName . ',' . $country . '&key=' . $apiKey . '&hours=6';
     }
 
-    public function prepareForecastData($response)
+    private function prepareForecastData($response)
     {
         $forecastData = [
             'cityName' => $response['city_name'],
